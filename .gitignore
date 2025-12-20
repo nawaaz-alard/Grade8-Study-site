@@ -1,0 +1,19 @@
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Node modules (if you add them later)
+node_modules/
+npm-debug.log
+
+# Editor directories
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project specific
+study-background.mp4
+# We exclude the large video file to avoid upload issues, 
+# but you can remove this line if you want to track it.
