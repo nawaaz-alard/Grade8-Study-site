@@ -33,20 +33,7 @@
     <script src="https://accounts.google.com/gsi/client" async defer></script>
 
     <!-- Login Gateway Overlay -->
-    <div id="login-gateway">
-        <div id="login-box" class="glass-panel-md text-center">
-            <h1>Welcome to Grade 8 Portal</h1>
-            <p>Please sign in with your school Google account to continue.</p>
-            <div id="g_id_onload"
-                data-client_id="895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com"
-                data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
-                data-auto_prompt="false">
-            </div>
-            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"
-                data-text="signin_with" data-size="large" data-logo_alignment="left">
-            </div>
-        </div>
-    </div>
+
 
     <!-- 2FA / Security PIN Overlay -->
     <div id="auth-step-2" style="display: none;">
@@ -76,12 +63,34 @@
         <header class="main-header">
             <div class="header-top-row">
                 <div id="datetime-display"></div>
-                <!-- Theme Switcher -->
-                <div class="theme-switcher">
-                    <button class="theme-btn" data-color="#6a11cb" style="background: #6a11cb;"></button>
-                    <button class="theme-btn" data-color="#00b894" style="background: #00b894;"></button>
-                    <button class="theme-btn" data-color="#e17055" style="background: #e17055;"></button>
-                    <button class="theme-btn" data-color="#0984e3" style="background: #0984e3;"></button>
+                <!-- Right Side Controls -->
+                <div class="header-controls">
+                    <!-- Theme Switcher -->
+                    <div class="theme-switcher">
+                        <button class="theme-btn" data-color="#6a11cb" style="background: #6a11cb;"></button>
+                        <button class="theme-btn" data-color="#00b894" style="background: #00b894;"></button>
+                        <button class="theme-btn" data-color="#e17055" style="background: #e17055;"></button>
+                        <button class="theme-btn" data-color="#0984e3" style="background: #0984e3;"></button>
+                    </div>
+
+                    <!-- Google Login (Top Right) -->
+                    <div id="google-login-container">
+                        <div id="g_id_onload"
+                            data-client_id="895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com"
+                            data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                            data-auto_prompt="false">
+                        </div>
+                        <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"
+                            data-text="signin_with" data-size="medium" data-logo_alignment="left">
+                        </div>
+                        <div id="user-profile" style="display: none; align-items: center; gap: 10px;">
+                            <img id="user-avatar" src="" alt="User"
+                                style="width: 32px; height: 32px; border-radius: 50%;">
+                            <button id="sign-out-btn"
+                                style="background: rgba(255,255,255,0.1); border: none; color: white; padding: 5px 10px; border-radius: 5px; cursor: pointer;">Sign
+                                Out</button>
+                        </div>
+                    </div>
                 </div>
             </div>
 

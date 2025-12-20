@@ -10,24 +10,37 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initGoogleLogin() {
-    const gateway = document.getElementById('login-gateway');
     const authStep2 = document.getElementById('auth-step-2');
+    const userProfile = document.getElementById('user-profile');
+    const signinBtn = document.querySelector('.g_id_signin');
+    const userAvatar = document.getElementById('user-avatar');
+    const signOutBtn = document.getElementById('sign-out-btn');
+
     const userSession = localStorage.getItem('studyHubUser');
     const pinVerified = sessionStorage.getItem('studyHubPinVerified');
 
+    // Check Login State
     if (userSession) {
-        gateway.style.display = 'none';
-        if (pinVerified) {
-            authStep2.style.display = 'none';
-            const user = JSON.parse(userSession);
-            console.log('Welcome back', user.name);
-        } else {
+        const user = JSON.parse(userSession);
+        if (signinBtn) signinBtn.style.display = 'none';
+        if (userProfile) userProfile.style.display = 'flex';
+        if (userAvatar) userAvatar.src = user.picture;
+
+        // 2FA Check - Only show if not verified this session
+        if (!pinVerified) {
             authStep2.style.display = 'flex';
         }
     } else {
-        gateway.style.display = 'flex';
-        authStep2.style.display = 'none';
+        if (signinBtn) signinBtn.style.display = 'block';
+        if (userProfile) userProfile.style.display = 'none';
     }
+
+    // Sign Out Logic
+    signOutBtn.addEventListener('click', () => {
+        localStorage.removeItem('studyHubUser');
+        sessionStorage.removeItem('studyHubPinVerified');
+        location.reload();
+    });
 
     // PIN Verification Logic
     const pinInput = document.getElementById('pin-input');
@@ -45,7 +58,6 @@ function initGoogleLogin() {
     }
 
     verifyBtn.addEventListener('click', checkPin);
-
     pinInput.addEventListener('keypress', (e) => {
         if (e.key === 'Enter') checkPin();
     });
@@ -53,17 +65,8 @@ function initGoogleLogin() {
     // Global callback for Google Sign-In
     window.handleCredentialResponse = (response) => {
         try {
-            // Decode JWT payload (client-side only)
             const responsePayload = decodeJwtResponse(response.credential);
 
-            console.log("ID: " + responsePayload.sub);
-            console.log('Full Name: ' + responsePayload.name);
-            console.log('Given Name: ' + responsePayload.given_name);
-            console.log('Family Name: ' + responsePayload.family_name);
-            console.log("Image URL: " + responsePayload.picture);
-            console.log("Email: " + responsePayload.email);
-
-            // Store user session
             const user = {
                 id: responsePayload.sub,
                 name: responsePayload.name,
@@ -72,9 +75,14 @@ function initGoogleLogin() {
             };
             localStorage.setItem('studyHubUser', JSON.stringify(user));
 
-            // Hide gateway and show Step 2
-            gateway.style.display = 'none';
-            document.getElementById('auth-step-2').style.display = 'flex';
+            // Update UI immediately
+            if (signinBtn) signinBtn.style.display = 'none';
+            if (userProfile) userProfile.style.display = 'flex';
+            if (userAvatar) userAvatar.src = user.picture;
+
+            // Trigger 2FA
+            authStep2.style.display = 'flex';
+
         } catch (e) {
             console.error('Login failed', e);
         }
