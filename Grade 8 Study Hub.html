@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<!-- saved from url=(0069)file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html# -->
+<html lang="en" style="--primary-color: #6a11cb; --secondary-color: #2575fc;"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Grade 8 Success Portal - Your central hub for Cambridge Lower Secondary study resources, quizzes, and exam prep.">
+    <meta name="keywords" content="Grade 8, Study, Cambridge, Checkpoint, Maths, Science, English, Quiz, Exam Prep">
+    <meta name="author" content="Grade 8 Student">
+    <title>Grade 8 Study Hub</title>
+    <link rel="stylesheet" href="./Grade 8 Study Hub_files/style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com/">
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="">
+    <link href="./Grade 8 Study Hub_files/css2" rel="stylesheet">
+    <link rel="stylesheet" href="./Grade 8 Study Hub_files/all.min.css">
+    <link rel="manifest" href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/manifest.json">
+    <meta name="theme-color" content="#6a11cb">
+    <link rel="apple-touch-icon" href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/icon-192.png">
+</head>
+
+<body>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registered!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+
+    <!-- Background Video -->
+    <div class="video-background">
+        <div class="overlay"></div>
+        <video autoplay="" muted="" loop="" playsinline="" poster="background-poster.png" id="bg-video">
+            <source src="study-background.mp4" type="video/mp4">
+            <!-- Fallback if video is missing -->
+            Your browser does not support HTML5 video.
+        </video>
+    </div>
+
+    <!-- Main Content -->
+    <main class="glass-container">
+        <header class="main-header">
+            <div class="header-top-row">
+                <div id="datetime-display">13:59 • Saturday, 20 Dec</div>
+                <!-- Theme Switcher -->
+                <div class="theme-switcher">
+                    <button class="theme-btn" data-color="#6a11cb" style="background: #6a11cb;"></button>
+                    <button class="theme-btn" data-color="#00b894" style="background: #00b894;"></button>
+                    <button class="theme-btn" data-color="#e17055" style="background: #e17055;"></button>
+                    <button class="theme-btn" data-color="#0984e3" style="background: #0984e3;"></button>
+                </div>
+            </div>
+
+            <h1>Grade 8 <span class="highlight">Success</span> Portal</h1>
+            <p>Your central hub for all study resources and quizzes.</p>
+
+            <!-- Motivation Widget -->
+            <div id="motivation-box" class="glass-panel-sm" style="margin-bottom: 25px;">
+                <i class="fa-solid fa-quote-left"></i> <span id="quote-text" style="opacity: 1;">Success is the sum of small efforts, repeated day in and day out.</span>
+            </div>
+
+            <div class="tools-row">
+                <!-- Focus Timer -->
+                <div id="timer-box" class="glass-panel-md">
+                    <h3><i class="fa-solid fa-clock"></i> Focus Timer</h3>
+                    <div id="timer-display">30:00</div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">Start Focus</button>
+                        <button id="reset-timer" class="btn-secondary">Reset</button>
+                    </div>
+                    <p class="timer-status">Ready to focus?</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8; color: #ffcccc;">
+                        <i class="fa-solid fa-circle-exclamation"></i> You should only study for at least 30 mins
+                    </p>
+                </div>
+
+                <!-- To-Do List -->
+                <div id="todo-box" class="glass-panel-md" style="vertical-align: top;">
+                    <h3><i class="fa-solid fa-list-check"></i> Homework &amp; Tasks</h3>
+                    <div class="todo-input-group">
+                        <input type="text" id="todo-input" placeholder="Add a new task...">
+                        <button id="add-todo"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="todo-list"></ul>
+                </div>
+            </div>
+
+        </header>
+
+        <nav class="term-nav">
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#term1" class="nav-pill active">Term 1</a>
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#term2" class="nav-pill">Term 2</a>
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#term3" class="nav-pill">Term 3</a>
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#term4" class="nav-pill">Term 4</a>
+        </nav>
+
+        <div class="terms-container" id="terms-container">
+            <!-- Content generated by main.js -->
+        <section id="term1" class="term-section active">
+            <div class="cards-grid">
+                
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                <div class="card-content">
+                    <h3>Mathematics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="card-content">
+                    <h3>English</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-dna"></i></div>
+                <div class="card-content">
+                    <h3>Biology</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="card-content">
+                    <h3>Chemistry</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-atom"></i></div>
+                <div class="card-content">
+                    <h3>Physics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-content">
+                    <h3>Geography</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+                <div class="card-content">
+                    <h3>History</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="card-content">
+                    <h3>ICT</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
+                <div class="card-content">
+                    <h3>Global Perspectives</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-language"></i></div>
+                <div class="card-content">
+                    <h3>Second Language</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            </div>
+        </section><section id="term2" class="term-section ">
+            <div class="cards-grid">
+                
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                <div class="card-content">
+                    <h3>Mathematics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="card-content">
+                    <h3>English</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-dna"></i></div>
+                <div class="card-content">
+                    <h3>Biology</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="card-content">
+                    <h3>Chemistry</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-atom"></i></div>
+                <div class="card-content">
+                    <h3>Physics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-content">
+                    <h3>Geography</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+                <div class="card-content">
+                    <h3>History</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="card-content">
+                    <h3>ICT</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
+                <div class="card-content">
+                    <h3>Global Perspectives</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-language"></i></div>
+                <div class="card-content">
+                    <h3>Second Language</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            </div>
+        </section><section id="term3" class="term-section ">
+            <div class="cards-grid">
+                
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                <div class="card-content">
+                    <h3>Mathematics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="card-content">
+                    <h3>English</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-dna"></i></div>
+                <div class="card-content">
+                    <h3>Biology</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="card-content">
+                    <h3>Chemistry</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-atom"></i></div>
+                <div class="card-content">
+                    <h3>Physics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-content">
+                    <h3>Geography</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+                <div class="card-content">
+                    <h3>History</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="card-content">
+                    <h3>ICT</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
+                <div class="card-content">
+                    <h3>Global Perspectives</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-language"></i></div>
+                <div class="card-content">
+                    <h3>Second Language</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            </div>
+        </section><section id="term4" class="term-section ">
+            <div class="cards-grid">
+                
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-calculator"></i></div>
+                <div class="card-content">
+                    <h3>Mathematics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-book"></i></div>
+                <div class="card-content">
+                    <h3>English</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-dna"></i></div>
+                <div class="card-content">
+                    <h3>Biology</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-flask"></i></div>
+                <div class="card-content">
+                    <h3>Chemistry</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-atom"></i></div>
+                <div class="card-content">
+                    <h3>Physics</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-earth-americas"></i></div>
+                <div class="card-content">
+                    <h3>Geography</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-landmark"></i></div>
+                <div class="card-content">
+                    <h3>History</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-laptop-code"></i></div>
+                <div class="card-content">
+                    <h3>ICT</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-people-group"></i></div>
+                <div class="card-content">
+                    <h3>Global Perspectives</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            <a href="file:///C:/Users/Alard/Documents/github/Grade8-Study-site/index.html#" class="card" target="_blank">
+                <div class="card-icon"><i class="fa-solid fa-language"></i></div>
+                <div class="card-content">
+                    <h3>Second Language</h3>
+                    <p>Quiz Site</p>
+                </div>
+            </a>
+        
+            </div>
+        </section></div>
+
+        <script src="./Grade 8 Study Hub_files/config.js"></script>
+        <script src="./Grade 8 Study Hub_files/main.js"></script>
+    </main>
+
+
+
+</body></html>
