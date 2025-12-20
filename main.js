@@ -1,11 +1,95 @@
 // Initialize Dashboard
 document.addEventListener('DOMContentLoaded', () => {
+    initThemes();
+    initGoogleLogin(); // New
     renderContent();
     startClock();
     showMotivation();
     initNavigation();
     initTools();
 });
+
+function initGoogleLogin() {
+    const gateway = document.getElementById('login-gateway');
+    const authStep2 = document.getElementById('auth-step-2');
+    const userSession = localStorage.getItem('studyHubUser');
+    const pinVerified = sessionStorage.getItem('studyHubPinVerified');
+
+    if (userSession) {
+        gateway.style.display = 'none';
+        if (pinVerified) {
+            authStep2.style.display = 'none';
+            const user = JSON.parse(userSession);
+            console.log('Welcome back', user.name);
+        } else {
+            authStep2.style.display = 'flex';
+        }
+    } else {
+        gateway.style.display = 'flex';
+        authStep2.style.display = 'none';
+    }
+
+    // PIN Verification Logic
+    const pinInput = document.getElementById('pin-input');
+    const verifyBtn = document.getElementById('verify-pin-btn');
+    const errorMsg = document.getElementById('pin-error');
+
+    function checkPin() {
+        if (pinInput.value == (siteConfig.securityPin || "1234")) {
+            authStep2.style.display = 'none';
+            sessionStorage.setItem('studyHubPinVerified', 'true');
+        } else {
+            errorMsg.style.display = 'block';
+            pinInput.value = '';
+        }
+    }
+
+    verifyBtn.addEventListener('click', checkPin);
+
+    pinInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') checkPin();
+    });
+
+    // Global callback for Google Sign-In
+    window.handleCredentialResponse = (response) => {
+        try {
+            // Decode JWT payload (client-side only)
+            const responsePayload = decodeJwtResponse(response.credential);
+
+            console.log("ID: " + responsePayload.sub);
+            console.log('Full Name: ' + responsePayload.name);
+            console.log('Given Name: ' + responsePayload.given_name);
+            console.log('Family Name: ' + responsePayload.family_name);
+            console.log("Image URL: " + responsePayload.picture);
+            console.log("Email: " + responsePayload.email);
+
+            // Store user session
+            const user = {
+                id: responsePayload.sub,
+                name: responsePayload.name,
+                email: responsePayload.email,
+                picture: responsePayload.picture
+            };
+            localStorage.setItem('studyHubUser', JSON.stringify(user));
+
+            // Hide gateway and show Step 2
+            gateway.style.display = 'none';
+            document.getElementById('auth-step-2').style.display = 'flex';
+        } catch (e) {
+            console.error('Login failed', e);
+        }
+    };
+}
+
+function decodeJwtResponse(token) {
+    var base64Url = token.split('.')[1];
+    var base64 = base64Url.replace(/-/g, '+').replace(/_/g, '/');
+    var jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function (c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    return JSON.parse(jsonPayload);
+}
 
 function renderContent() {
     const container = document.getElementById('terms-container');
@@ -86,41 +170,12 @@ function initNavigation() {
 // --- Tools Implementation ---
 
 function initTools() {
-    initModals();
     initTimer();
     initTodo();
 }
 
-function initModals() {
-    const modals = {
-        'timer-btn': 'timer-modal',
-        'todo-btn': 'todo-modal'
-    };
-
-    // Open buttons
-    Object.keys(modals).forEach(btnId => {
-        document.getElementById(btnId).addEventListener('click', () => {
-            document.getElementById(modals[btnId]).classList.add('open');
-        });
-    });
-
-    // Close buttons
-    document.querySelectorAll('.close-btn').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.target.closest('.tool-modal').classList.remove('open');
-        });
-    });
-
-    // Click outside to close
-    document.querySelectorAll('.tool-modal').forEach(modal => {
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) modal.classList.remove('open');
-        });
-    });
-}
-
 function initTimer() {
-    let timeLeft = 25 * 60;
+    let timeLeft = 30 * 60;
     let timerId = null;
     const display = document.getElementById('timer-display');
     const status = document.querySelector('.timer-status');
@@ -158,7 +213,7 @@ function initTimer() {
     document.getElementById('reset-timer').addEventListener('click', () => {
         clearInterval(timerId);
         timerId = null;
-        timeLeft = 25 * 60;
+        timeLeft = 30 * 60;
         updateDisplay();
         startBtn.textContent = 'Start';
         status.textContent = 'Ready to focus?';
@@ -213,4 +268,33 @@ function initTodo() {
     });
 
     render();
+}
+
+// --- Personalization ---
+
+
+
+function initThemes() {
+    const savedColor = localStorage.getItem('studyHubTheme') || '#6a11cb'; // Default Purple
+    setTheme(savedColor);
+
+    document.querySelectorAll('.theme-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+            const color = btn.getAttribute('data-color');
+            setTheme(color);
+            localStorage.setItem('studyHubTheme', color);
+        });
+    });
+}
+
+function setTheme(color) {
+    document.documentElement.style.setProperty('--primary-color', color);
+
+    // Adjust gradient based on primary color
+    let secondary = '#2575fc'; // Default Blue
+    if (color === '#00b894') secondary = '#0984e3'; // Green -> Blue
+    if (color === '#e17055') secondary = '#d63031'; // Orange -> Red
+    if (color === '#0984e3') secondary = '#6c5ce7'; // Blue -> Purple
+
+    document.documentElement.style.setProperty('--secondary-color', secondary);
 }

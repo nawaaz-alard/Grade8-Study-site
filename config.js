@@ -1,5 +1,10 @@
 const siteConfig = {
     userName: "Student",
+    googleClientId: "895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com",
+    securityPin: "1234", // Secondary Authentication PIN
+    // Set your next big exam date here (YYYY-MM-DD or YYYY-MM-DDTHH:MM)
+    examDate: "2025-11-15T09:00",
+    examName: "Final Exams",
     motivationalQuotes: [
         "Believe you can and you're halfway there.",
         "Success is the sum of small efforts, repeated day in and day out.",

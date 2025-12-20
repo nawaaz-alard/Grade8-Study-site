@@ -14,9 +14,52 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#6a11cb">
+    <link rel="apple-touch-icon" href="icon-192.png">
 </head>
 
 <body>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./service-worker.js')
+                    .then(reg => console.log('Service Worker registered!', reg.scope))
+                    .catch(err => console.log('Service Worker registration failed: ', err));
+            });
+        }
+    </script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Login Gateway Overlay -->
+    <div id="login-gateway">
+        <div id="login-box" class="glass-panel-md text-center">
+            <h1>Welcome to Grade 8 Portal</h1>
+            <p>Please sign in with your school Google account to continue.</p>
+            <div id="g_id_onload"
+                data-client_id="895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com"
+                data-context="signin" data-ux_mode="popup" data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+            </div>
+            <div class="g_id_signin" data-type="standard" data-shape="pill" data-theme="filled_blue"
+                data-text="signin_with" data-size="large" data-logo_alignment="left">
+            </div>
+        </div>
+    </div>
+
+    <!-- 2FA / Security PIN Overlay -->
+    <div id="auth-step-2" style="display: none;">
+        <div id="pin-box" class="glass-panel-md text-center">
+            <h2><i class="fa-solid fa-shield-halved"></i> Security Check</h2>
+            <p>Please enter your 4-digit PIN to unlock.</p>
+            <div class="pin-input-group">
+                <input type="password" id="pin-input" maxlength="4" placeholder="••••">
+                <button id="verify-pin-btn"><i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+            <p id="pin-error" style="color: #ff4757; display: none; margin-top: 10px;">Incorrect PIN. Try again.</p>
+        </div>
+    </div>
 
     <!-- Background Video -->
     <div class="video-background">
@@ -31,12 +74,53 @@
     <!-- Main Content -->
     <main class="glass-container">
         <header class="main-header">
-            <div id="datetime-display"></div>
+            <div class="header-top-row">
+                <div id="datetime-display"></div>
+                <!-- Theme Switcher -->
+                <div class="theme-switcher">
+                    <button class="theme-btn" data-color="#6a11cb" style="background: #6a11cb;"></button>
+                    <button class="theme-btn" data-color="#00b894" style="background: #00b894;"></button>
+                    <button class="theme-btn" data-color="#e17055" style="background: #e17055;"></button>
+                    <button class="theme-btn" data-color="#0984e3" style="background: #0984e3;"></button>
+                </div>
+            </div>
+
             <h1>Grade 8 <span class="highlight">Success</span> Portal</h1>
             <p>Your central hub for all study resources and quizzes.</p>
-            <div id="motivation-box" class="glass-panel-sm">
+
+            <!-- Motivation Widget -->
+            <div id="motivation-box" class="glass-panel-sm" style="margin-bottom: 25px;">
                 <i class="fa-solid fa-quote-left"></i> <span id="quote-text">Loading inspiration...</span>
             </div>
+
+            <div class="tools-row">
+                <!-- Focus Timer -->
+                <div id="timer-box" class="glass-panel-md">
+                    <h3><i class="fa-solid fa-clock"></i> Focus Timer</h3>
+                    <div id="timer-display">30:00</div>
+                    <div class="timer-controls">
+                        <button id="start-timer" class="btn-primary">Start Focus</button>
+                        <button id="reset-timer" class="btn-secondary">Reset</button>
+                    </div>
+                    <p class="timer-status">Ready to focus?</p>
+                    <p style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8; color: #ffcccc;">
+                        <i class="fa-solid fa-circle-exclamation"></i> You should only study for at least 30 mins
+                    </p>
+                </div>
+
+                <!-- To-Do List -->
+                <div id="todo-box" class="glass-panel-md" style="vertical-align: top;">
+                    <h3><i class="fa-solid fa-list-check"></i> Homework & Tasks</h3>
+                    <div class="todo-input-group">
+                        <input type="text" id="todo-input" placeholder="Add a new task...">
+                        <button id="add-todo"><i class="fa-solid fa-plus"></i></button>
+                    </div>
+                    <ul id="todo-list">
+                        <!-- Tasks will appear here -->
+                    </ul>
+                </div>
+            </div>
+
         </header>
 
         <nav class="term-nav">
