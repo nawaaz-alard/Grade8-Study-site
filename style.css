@@ -21,8 +21,8 @@ body {
     font-family: var(--font-main);
     color: var(--text-color);
     overflow-x: hidden;
-    background-color: #0f0c29;
-    /* Fallback */
+    background-color: transparent;
+    /* Changed to transparent for video visibility */
     min-height: 100vh;
 }
 
@@ -82,6 +82,31 @@ body {
     height: 100%;
     z-index: -1;
     overflow: hidden;
+    background-color: #0f0c29;
+    /* Move fallback color here */
+}
+
+#bg-video {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    min-width: 100%;
+    min-height: 100%;
+    width: auto;
+    height: auto;
+    transform: translate(-50%, -50%);
+    object-fit: cover;
+}
+
+.overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 12, 41, 0.6);
+    /* Adjust darkening here */
+    z-index: 1;
 }
 
 
