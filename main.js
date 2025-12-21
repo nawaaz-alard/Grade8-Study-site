@@ -17,7 +17,7 @@ function initGoogleLogin() {
     const signOutBtn = document.getElementById('sign-out-btn');
 
     const userSession = localStorage.getItem('studyHubUser');
-    const pinVerified = sessionStorage.getItem('studyHubPinVerified');
+    const profileCompleted = sessionStorage.getItem('studyHubProfileCompleted');
 
     // Check Login State
     if (userSession) {
@@ -26,8 +26,8 @@ function initGoogleLogin() {
         if (userProfile) userProfile.style.display = 'flex';
         if (userAvatar) userAvatar.src = user.picture;
 
-        // 2FA Check - Only show if not verified this session
-        if (!pinVerified) {
+        // Profile Completion Check
+        if (!profileCompleted) {
             authStep2.style.display = 'flex';
         }
     } else {
@@ -35,31 +35,53 @@ function initGoogleLogin() {
         if (userProfile) userProfile.style.display = 'none';
     }
 
-    // Sign Out Logic
-    signOutBtn.addEventListener('click', () => {
-        localStorage.removeItem('studyHubUser');
-        sessionStorage.removeItem('studyHubPinVerified');
-        location.reload();
-    });
+    // Profile Setup Logic (Replaces PIN)
+    const birthYearInput = document.getElementById('birth-year');
+    const usernameInput = document.getElementById('display-username');
+    const finishSetupBtn = document.getElementById('finish-setup-btn');
+    const setupError = document.getElementById('setup-error');
 
-    // PIN Verification Logic
-    const pinInput = document.getElementById('pin-input');
-    const verifyBtn = document.getElementById('verify-pin-btn');
-    const errorMsg = document.getElementById('pin-error');
+    function saveProfile() {
+        const year = birthYearInput.value;
+        const username = usernameInput.value.trim();
 
-    function checkPin() {
-        if (pinInput.value == (siteConfig.securityPin || "1234")) {
+        if (year && username && year > 1900 && year <= new Date().getFullYear()) {
+            // Update existing user session in localStorage
+            const user = JSON.parse(localStorage.getItem('studyHubUser')) || {};
+            user.birthYear = year;
+            user.username = username;
+            localStorage.setItem('studyHubUser', JSON.stringify(user));
+
+            // Mark profile as completed for this session
+            sessionStorage.setItem('studyHubProfileCompleted', 'true');
+
+            // Hide setup box
             authStep2.style.display = 'none';
-            sessionStorage.setItem('studyHubPinVerified', 'true');
+
+            // Update UI with new username if needed
+            console.log('Profile setup complete for', username);
         } else {
-            errorMsg.style.display = 'block';
-            pinInput.value = '';
+            setupError.style.display = 'block';
         }
     }
 
-    verifyBtn.addEventListener('click', checkPin);
-    pinInput.addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') checkPin();
+    if (finishSetupBtn) {
+        finishSetupBtn.addEventListener('click', saveProfile);
+    }
+
+    [birthYearInput, usernameInput].forEach(input => {
+        if (input) {
+            input.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') saveProfile();
+            });
+        }
+    });
+
+    // Sign Out Logic
+    signOutBtn.addEventListener('click', () => {
+        localStorage.removeItem('studyHubUser');
+        sessionStorage.removeItem('studyHubProfileCompleted');
+        location.reload();
     });
 
     // Guest Mode Logic
