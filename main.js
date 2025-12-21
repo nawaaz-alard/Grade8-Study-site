@@ -14,6 +14,7 @@ function initGoogleLogin() {
     const userProfile = document.getElementById('user-profile');
     const signinBtn = document.querySelector('.g_id_signin');
     const userAvatar = document.getElementById('user-avatar');
+    const usernameText = document.getElementById('username-text');
     const signOutBtn = document.getElementById('sign-out-btn');
 
     const userSession = localStorage.getItem('studyHubUser');
@@ -23,8 +24,10 @@ function initGoogleLogin() {
     if (userSession) {
         const user = JSON.parse(userSession);
         if (signinBtn) signinBtn.style.display = 'none';
+        if (guestContainer) guestContainer.style.display = 'none';
         if (userProfile) userProfile.style.display = 'flex';
         if (userAvatar) userAvatar.src = user.picture;
+        if (usernameText) usernameText.textContent = user.username || user.name;
 
         // Profile Completion Check
         if (!profileCompleted) {
@@ -32,6 +35,7 @@ function initGoogleLogin() {
         }
     } else {
         if (signinBtn) signinBtn.style.display = 'block';
+        if (guestContainer) guestContainer.style.display = 'block';
         if (userProfile) userProfile.style.display = 'none';
     }
 
@@ -59,6 +63,7 @@ function initGoogleLogin() {
             authStep2.style.display = 'none';
 
             // Update UI with new username if needed
+            if (usernameText) usernameText.textContent = username;
             console.log('Profile setup complete for', username);
         } else {
             setupError.style.display = 'block';
