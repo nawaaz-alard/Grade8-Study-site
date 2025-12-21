@@ -16,6 +16,7 @@ function initGoogleLogin() {
     const userAvatar = document.getElementById('user-avatar');
     const usernameText = document.getElementById('username-text');
     const signOutBtn = document.getElementById('sign-out-btn');
+    const guestContainer = document.getElementById('guest-login');
 
     const userSession = localStorage.getItem('studyHubUser');
     const profileCompleted = sessionStorage.getItem('studyHubProfileCompleted');
@@ -91,7 +92,6 @@ function initGoogleLogin() {
 
     // Guest Mode Logic
     const guestBtn = document.getElementById('enter-guest');
-    const guestContainer = document.getElementById('guest-login');
 
     if (guestBtn) {
         guestBtn.addEventListener('click', (e) => {

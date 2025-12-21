@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grade8-hub-v5';
+const CACHE_NAME = 'grade8-hub-v6';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
