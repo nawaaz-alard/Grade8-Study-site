@@ -63,9 +63,11 @@ function initGoogleLogin() {
     });
 
     // Guest Mode Logic
-    const guestLink = document.getElementById('enter-guest');
-    if (guestLink) {
-        guestLink.addEventListener('click', (e) => {
+    const guestBtn = document.getElementById('enter-guest');
+    const guestContainer = document.getElementById('guest-login');
+
+    if (guestBtn) {
+        guestBtn.addEventListener('click', (e) => {
             e.preventDefault();
             const guestUser = {
                 id: 'guest',
@@ -77,7 +79,7 @@ function initGoogleLogin() {
 
             // Show Profile
             if (signinBtn) signinBtn.style.display = 'none';
-            if (guestLink.parentElement) guestLink.parentElement.style.display = 'none';
+            if (guestContainer) guestContainer.style.display = 'none';
             if (userProfile) userProfile.style.display = 'flex';
             if (userAvatar) userAvatar.src = guestUser.picture;
 
@@ -86,9 +88,9 @@ function initGoogleLogin() {
         });
     }
 
-    // Hide guest link if already logged in
-    if (userSession && guestLink) {
-        guestLink.parentElement.style.display = 'none';
+    // Hide guest button if already logged in
+    if (userSession && guestContainer) {
+        guestContainer.style.display = 'none';
     }
 
     // Global callback for Google Sign-In
