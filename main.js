@@ -62,6 +62,35 @@ function initGoogleLogin() {
         if (e.key === 'Enter') checkPin();
     });
 
+    // Guest Mode Logic
+    const guestLink = document.getElementById('enter-guest');
+    if (guestLink) {
+        guestLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            const guestUser = {
+                id: 'guest',
+                name: 'Guest User',
+                email: 'guest@portal.local',
+                picture: 'https://ui-avatars.com/api/?name=Guest+User&background=6a11cb&color=fff'
+            };
+            localStorage.setItem('studyHubUser', JSON.stringify(guestUser));
+
+            // Show Profile
+            if (signinBtn) signinBtn.style.display = 'none';
+            if (guestLink.parentElement) guestLink.parentElement.style.display = 'none';
+            if (userProfile) userProfile.style.display = 'flex';
+            if (userAvatar) userAvatar.src = guestUser.picture;
+
+            // Trigger 2FA for security
+            authStep2.style.display = 'flex';
+        });
+    }
+
+    // Hide guest link if already logged in
+    if (userSession && guestLink) {
+        guestLink.parentElement.style.display = 'none';
+    }
+
     // Global callback for Google Sign-In
     window.handleCredentialResponse = (response) => {
         try {
