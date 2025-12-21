@@ -1,4 +1,4 @@
-const CACHE_NAME = 'grade8-hub-v7';
+const CACHE_NAME = 'grade8-hub-v8';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
@@ -7,6 +7,7 @@ const ASSETS_TO_CACHE = [
     './config.js',
     './manifest.json',
     './background-poster.png',
+    './study-background.mp4',
     'https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap',
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css'
 ];
