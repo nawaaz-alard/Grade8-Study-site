@@ -52,7 +52,7 @@ const siteConfig = {
         { term: 3, subject: "Second Language", topic: "Quiz Site", url: "#", icon: "fa-language" },
 
         // TERM 4
-        { term: 4, subject: "Mathematics", topic: "Quiz Site", url: "#", icon: "fa-calculator" },
+        { term: 4, subject: "Mathematics", topic: "Quiz Site", url: "https://nawaaz-alard.github.io/Math-quiz-site/", icon: "fa-calculator" },
         { term: 4, subject: "English", topic: "Quiz Site", url: "#", icon: "fa-book" },
         { term: 4, subject: "Biology", topic: "Quiz Site", url: "#", icon: "fa-dna" },
         { term: 4, subject: "Chemistry", topic: "Quiz Site", url: "#", icon: "fa-flask" },
