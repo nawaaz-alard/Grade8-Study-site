@@ -19,15 +19,7 @@ export default ({ app }: { app: express.Application }) => {
     // The magic package that prevents frontend developers going crazy
     // Alternate description:
     // Enable Cross Origin Resource Sharing to all origins by default
-    app.use(cors({
-        origin: [
-            'http://localhost:8080',
-            'http://localhost:5500',
-            'http://127.0.0.1:5500',
-            'https://happy-ocean-04aa71303.1.azurestaticapps.net' // User's Frontend
-        ],
-        credentials: true
-    }));
+    app.use(cors());
 
     // Middleware that transforms the raw string of req.body into json
     app.use(express.json());

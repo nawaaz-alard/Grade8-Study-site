@@ -2,9 +2,7 @@ const siteConfig = {
     userName: "Student",
     googleClientId: "895631263906-0m54r2mfu8aatr5jq9qlnmrl0c78m72g.apps.googleusercontent.com",
     // BACKEND API URL
-    // Defaulting to the App Service name from our workflow. 
-    // IF you named your Azure App Service something else, change this!
-    apiBaseUrl: "https://grade8-api-alard-fwetgucmggf8c9fg.canadacentral-01.azurewebsites.net/api",
+    apiBaseUrl: "http://localhost:8080/api",
     securityPin: "1234", // Secondary Authentication PIN
     // Set your next big exam date here (YYYY-MM-DD or YYYY-MM-DDTHH:MM)
     examDate: "2025-11-15T09:00",
