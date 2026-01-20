@@ -2,6 +2,7 @@
     "name": "grade8-study-hub-root",
     "version": "1.0.0",
     "scripts": {
+        "build": "echo 'No build step for static site'",
         "test:e2e": "playwright test"
     },
     "devDependencies": {
