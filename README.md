@@ -18,12 +18,11 @@ A comprehensive study portal for Grade 8 students, featuring subject resources, 
 *   **Backend**: Node.js, Express.js, TypeScript.
 *   **Database**: MongoDB (Mongoose ODM).
 *   **Authentication**: JSON Web Tokens (JWT) & bcrypt.
-*   **DevOps**: GitHub Actions (CI/CD), Azure Static Web Apps, Azure App Service.
+*   **DevOps**: Local Development Environment.
 
 ## 📦 Project Structure
 
 ```
-├── .github/workflows   # CI/CD Pipelines
 ├── backend/            # API Server (Node.js/Express)
 │   ├── src/            # Source Code
 │   ├── tests/          # Unit & Integration Tests
@@ -52,13 +51,7 @@ npm run dev
 *   Open `index.html` with Live Server (VS Code Extension).
 *   Or run a simple http server in the root directory.
 
-## ☁️ Deployment
-
-*   **Frontend**: Auto-deploys to **Azure Static Web Apps** on push to `main`.
-*   **Backend**: Auto-deploys to **Azure App Service** on push to `main` (if `backend/` changes).
-
 ## 📚 API Documentation
 
 When the backend is running, visit:
-`http://localhost:8080/api/docs` (Local)
-`https://grade8-study-hub-api.azurewebsites.net/api/docs` (Prod)
+`http://localhost:8080/api/docs`
