@@ -1,6 +1,8 @@
 const siteConfig = {
     userName: "Student",
     googleClientId: "895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com",
+    // API URL: Change to 'https://<YOUR_APP>.azurewebsites.net/api' for production
+    apiBaseUrl: "http://localhost:8080/api",
     securityPin: "1234", // Secondary Authentication PIN
     // Set your next big exam date here (YYYY-MM-DD or YYYY-MM-DDTHH:MM)
     examDate: "2025-11-15T09:00",

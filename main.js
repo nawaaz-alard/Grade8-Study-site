@@ -9,6 +9,45 @@ document.addEventListener('DOMContentLoaded', () => {
     initTools();
 });
 
+// --- API Helper ---
+async function apiCall(endpoint, method = 'GET', body = null) {
+    const token = localStorage.getItem('studyHubToken');
+    const headers = {
+        'Content-Type': 'application/json'
+    };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    try {
+        const response = await fetch(`${siteConfig.apiBaseUrl}${endpoint}`, {
+            method,
+            headers,
+            body: body ? JSON.stringify(body) : null
+        });
+
+        if (response.status === 401) {
+            // Token expired or invalid
+            console.warn('Session expired, logging out...');
+            localStorage.removeItem('studyHubToken');
+            localStorage.removeItem('studyHubUser');
+            location.reload();
+            return null;
+        }
+
+        if (!response.ok) {
+            const errData = await response.json();
+            throw new Error(errData.message || 'API Error');
+        }
+
+        return await response.json();
+    } catch (error) {
+        console.error('API Call Failed:', error);
+        throw error;
+    }
+}
+
+// --- Auth Logic ---
 function initGoogleLogin() {
     const authStep2 = document.getElementById('auth-step-2');
     const userProfile = document.getElementById('user-profile');
@@ -40,55 +79,68 @@ function initGoogleLogin() {
         if (userProfile) userProfile.style.display = 'none';
     }
 
-    // Profile Setup Logic (Replaces PIN)
-    const birthYearInput = document.getElementById('birth-year');
-    const usernameInput = document.getElementById('display-username');
-    const finishSetupBtn = document.getElementById('finish-setup-btn');
+    const authEmail = document.getElementById('auth-email');
+    const authPassword = document.getElementById('auth-password');
+    const authUsername = document.getElementById('auth-username');
+    const loginBtn = document.getElementById('btn-login');
+    const signupBtn = document.getElementById('btn-signup');
     const setupError = document.getElementById('setup-error');
 
-    function saveProfile() {
-        const year = birthYearInput.value;
-        const username = usernameInput.value.trim();
+    async function handleAuth(mode) {
+        const email = authEmail.value;
+        const password = authPassword.value;
+        const username = authUsername.value;
 
-        if (year && username && year > 1900 && year <= new Date().getFullYear()) {
-            // Update existing user session in localStorage
-            const user = JSON.parse(localStorage.getItem('studyHubUser')) || {};
-            user.birthYear = year;
-            user.username = username;
-            localStorage.setItem('studyHubUser', JSON.stringify(user));
+        if (!email || !password) {
+            setupError.textContent = "Please enter email and password.";
+            setupError.style.display = 'block';
+            return;
+        }
 
-            // Mark profile as completed for this session
+        try {
+            let data;
+            if (mode === 'signup') {
+                if (!username) {
+                    setupError.textContent = "Username required for signup.";
+                    setupError.style.display = 'block';
+                    return;
+                }
+                // Call API Signup
+                data = await apiCall('/auth/signup', 'POST', { email, password, username });
+            } else {
+                // Call API Login
+                data = await apiCall('/auth/signin', 'POST', { email, password });
+            }
+
+            // Success
+            localStorage.setItem('studyHubToken', data.token);
+            // We need to fetch the user profile if login didn't return it full (authService usually returns {user, token})
+            // Let's assume data.user is present
+            if (data.user) {
+                localStorage.setItem('studyHubUser', JSON.stringify(data.user));
+            }
+
             sessionStorage.setItem('studyHubProfileCompleted', 'true');
+            location.reload(); // Refresh to load state
 
-            // Hide setup box
-            authStep2.style.display = 'none';
-
-            // Update UI with new username if needed
-            if (usernameText) usernameText.textContent = username;
-            console.log('Profile setup complete for', username);
-        } else {
+        } catch (err) {
+            setupError.textContent = err.message;
             setupError.style.display = 'block';
         }
     }
 
-    if (finishSetupBtn) {
-        finishSetupBtn.addEventListener('click', saveProfile);
-    }
-
-    [birthYearInput, usernameInput].forEach(input => {
-        if (input) {
-            input.addEventListener('keypress', (e) => {
-                if (e.key === 'Enter') saveProfile();
-            });
-        }
-    });
+    if (loginBtn) loginBtn.addEventListener('click', () => handleAuth('login'));
+    if (signupBtn) signupBtn.addEventListener('click', () => handleAuth('signup'));
 
     // Sign Out Logic
-    signOutBtn.addEventListener('click', () => {
-        localStorage.removeItem('studyHubUser');
-        sessionStorage.removeItem('studyHubProfileCompleted');
-        location.reload();
-    });
+    if (signOutBtn) {
+        signOutBtn.addEventListener('click', () => {
+            localStorage.removeItem('studyHubUser');
+            localStorage.removeItem('studyHubToken');
+            sessionStorage.removeItem('studyHubProfileCompleted');
+            location.reload();
+        });
+    }
 
     // Guest Mode Logic
     const guestBtn = document.getElementById('enter-guest');
@@ -157,12 +209,26 @@ function decodeJwtResponse(token) {
     return JSON.parse(jsonPayload);
 }
 
-function renderContent() {
+async function renderContent() {
     const container = document.getElementById('terms-container');
     const terms = [1, 2, 3, 4];
+    let allResources = siteConfig.links; // Default/Fallback
+
+    // Try fetching from API
+    try {
+        const apiResources = await apiCall('/resources', 'GET');
+        if (apiResources && apiResources.length > 0) {
+            allResources = apiResources;
+            console.log('Loaded resources from API');
+        }
+    } catch (e) {
+        console.log('Using local config resources');
+    }
+
+    container.innerHTML = ''; // Clear previous content
 
     terms.forEach((term) => {
-        const termLinks = siteConfig.links.filter(link => link.term === term);
+        const termLinks = allResources.filter(link => link.term === term);
 
         const section = document.createElement('section');
         section.id = `term${term}`;
@@ -170,10 +236,10 @@ function renderContent() {
 
         const cardsHtml = termLinks.map(link => `
             <a href="${link.url}" class="card" target="_blank">
-                <div class="card-icon"><i class="fa-solid ${link.icon}"></i></div>
+                <div class="card-icon"><i class="fa-solid ${link.icon || 'fa-book'}"></i></div>
                 <div class="card-content">
                     <h3>${link.subject}</h3>
-                    <p>${link.topic}</p>
+                    <p>${link.topic || link.description || 'Study Material'}</p>
                 </div>
             </a>
         `).join('');
@@ -286,46 +352,80 @@ function initTimer() {
     });
 }
 
-function initTodo() {
+async function initTodo() {
     const input = document.getElementById('todo-input');
     const addBtn = document.getElementById('add-todo');
     const list = document.getElementById('todo-list');
 
-    let todos = JSON.parse(localStorage.getItem('studyHubTodos')) || [];
-
-    function save() {
-        localStorage.setItem('studyHubTodos', JSON.stringify(todos));
-        render();
+    // 1. Fetch initial Tasks from API
+    let todos = [];
+    try {
+        todos = await apiCall('/tasks', 'GET');
+    } catch (e) {
+        console.log('Could not fetch tasks (maybe offline or guest)', e);
+        // Fallback to local? Or empty.
+        todos = [];
     }
+
+    // Sort: Uncompleted first
+    // todos.sort((a, b) => a.completed === b.completed ? 0 : a.completed ? 1 : -1);
 
     function render() {
         list.innerHTML = '';
+        if (!todos) return;
+
         todos.forEach((todo, index) => {
             const li = document.createElement('li');
             li.className = todo.completed ? 'completed' : '';
             li.innerHTML = `
-                <span onclick="toggleTodo(${index})">${todo.text}</span>
-                <button class="delete-todo" onclick="deleteTodo(${index})"><i class="fa-solid fa-trash"></i></button>
+                <span onclick="toggleTodo('${todo._id}')">${todo.text}</span>
+                <button class="delete-todo" onclick="deleteTodo('${todo._id}')"><i class="fa-solid fa-trash"></i></button>
             `;
             list.appendChild(li);
         });
     }
 
-    window.toggleTodo = (index) => {
-        todos[index].completed = !todos[index].completed;
-        save();
+    window.toggleTodo = async (id) => {
+        // Optimistic UI update
+        const task = todos.find(t => t._id === id);
+        if (task) {
+            task.completed = !task.completed;
+            render();
+            // Sync
+            try {
+                await apiCall(`/tasks/${id}`, 'PUT', { completed: task.completed });
+            } catch (e) {
+                console.error('Failed to update task', e);
+            }
+        }
     };
 
-    window.deleteTodo = (index) => {
-        todos.splice(index, 1);
-        save();
+    window.deleteTodo = async (id) => {
+        // Optimistic UI
+        const idx = todos.findIndex(t => t._id === id);
+        if (idx > -1) {
+            todos.splice(idx, 1);
+            render();
+            // Sync
+            try {
+                await apiCall(`/tasks/${id}`, 'DELETE');
+            } catch (e) {
+                console.error('Failed to delete task', e);
+            }
+        }
     };
 
-    addBtn.addEventListener('click', () => {
-        if (input.value.trim()) {
-            todos.push({ text: input.value, completed: false });
+    addBtn.addEventListener('click', async () => {
+        const text = input.value.trim();
+        if (text) {
             input.value = '';
-            save();
+            try {
+                const newTask = await apiCall('/tasks', 'POST', { text });
+                todos.push(newTask);
+                render();
+            } catch (e) {
+                alert('Error adding task: ' + e.message);
+            }
         }
     });
 
