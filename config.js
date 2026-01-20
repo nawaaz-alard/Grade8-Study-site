@@ -4,7 +4,7 @@ const siteConfig = {
     // BACKEND API URL
     // Defaulting to the App Service name from our workflow. 
     // IF you named your Azure App Service something else, change this!
-    apiBaseUrl: "https://grade8-study-hub-api.azurewebsites.net/api",
+    apiBaseUrl: "https://grade8-api-alard-fwetgucmggf8c9fg.canadacentral-01.azurewebsites.net/api",
     securityPin: "1234", // Secondary Authentication PIN
     // Set your next big exam date here (YYYY-MM-DD or YYYY-MM-DDTHH:MM)
     examDate: "2025-11-15T09:00",
