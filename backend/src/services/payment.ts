@@ -38,8 +38,8 @@ export default class PaymentService {
                     },
                 ],
                 mode: 'subscription',
-                success_url: `http://localhost:3000?success=true`,
-                cancel_url: `http://localhost:3000?canceled=true`,
+                success_url: config.stripe.successUrl,
+                cancel_url: config.stripe.cancelUrl,
                 metadata: {
                     userId,
                 },

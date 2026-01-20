@@ -1,0 +1,92 @@
+openapi: 3.0.0
+info:
+  title: Grade 8 Study Hub API
+  description: Enterprise SaaS API for Grade 8 Study Platform
+  version: 1.0.0
+servers:
+  - url: http://localhost:8080/api
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
+paths:
+  /auth/signup:
+    post:
+      summary: Register a new user
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                username:
+                  type: string
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '201':
+          description: User created
+  /auth/signin:
+    post:
+      summary: Login
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                password:
+                  type: string
+      responses:
+        '200':
+          description: Login successful
+  /tasks:
+    get:
+      summary: Get all tasks for current user
+      responses:
+        '200':
+          description: List of tasks
+    post:
+      summary: Create a task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                text:
+                  type: string
+                dueDate:
+                  type: string
+                  format: date-time
+      responses:
+        '201':
+          description: Task created
+  /resources:
+    get:
+      summary: Get study resources
+      parameters:
+        - in: query
+          name: subject
+          schema:
+            type: string
+        - in: query
+          name: term
+          schema:
+            type: number
+      responses:
+        '200':
+          description: List of resources

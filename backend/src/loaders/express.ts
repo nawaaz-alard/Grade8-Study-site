@@ -27,6 +27,11 @@ export default ({ app }: { app: express.Application }) => {
     // Helmet logic for security headers
     app.use(helmet());
 
+    // Swagger UI
+    const swaggerDocument = require('yamljs').load('./swagger.yaml');
+    const swaggerUi = require('swagger-ui-express');
+    app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
     // Load API routes
     app.use(config.api.prefix, routes());
 
