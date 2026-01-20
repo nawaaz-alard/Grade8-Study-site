@@ -1,6 +1,6 @@
 const siteConfig = {
     userName: "Student",
-    googleClientId: "895631263906-lksleo57ioccvuekgd4qg3bcj2qmn5ci.apps.googleusercontent.com",
+    googleClientId: "895631263906-0m54r2mfu8aatr5jq9qlnmrl0c78m72g.apps.googleusercontent.com",
     // BACKEND API URL
     // Defaulting to the App Service name from our workflow. 
     // IF you named your Azure App Service something else, change this!
