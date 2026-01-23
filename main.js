@@ -5,12 +5,180 @@ document.addEventListener('DOMContentLoaded', () => {
     renderContent();
     startClock();
     showMotivation();
+    initVisualEffects(); // New
     initNavigation();
     initTools();
+    initAIChat(); // New
 });
+
+// --- Notifications & UI Helpers ---
+function showToast(message, type = 'info') {
+    const container = document.getElementById('toast-container');
+    if (!container) return; // Guard
+
+    const toast = document.createElement('div');
+    toast.className = `toast ${type}`;
+    toast.innerHTML = `
+        <i class="fa-solid ${type === 'success' ? 'fa-check-circle' : type === 'error' ? 'fa-exclamation-circle' : 'fa-info-circle'}"></i>
+        <span>${message}</span>
+    `;
+
+    container.appendChild(toast);
+
+    // Auto remove after 3s
+    setTimeout(() => {
+        toast.style.animation = 'fadeOutRight 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 3000);
+}
+
+// --- AI Assistant ---
+function initAIChat() {
+    const fab = document.getElementById('ai-fab');
+    const windowEl = document.getElementById('ai-chat-window');
+    const closeBtn = document.getElementById('close-chat');
+    const sendBtn = document.getElementById('chat-send');
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+
+    if (!fab) return;
+
+    function toggleChat() {
+        windowEl.classList.toggle('active');
+        if (windowEl.classList.contains('active')) input.focus();
+    }
+
+    fab.addEventListener('click', toggleChat);
+    closeBtn.addEventListener('click', toggleChat);
+
+    async function sendMessage() {
+        const text = input.value.trim();
+        if (!text) return;
+
+        // User Message
+        appendMessage('user', text);
+        input.value = '';
+
+        // Mock AI Response (Loading)
+        const loadingId = appendMessage('bot', '<i class="fa-solid fa-spinner fa-spin"></i> Thinking...');
+
+        // Simulate delay/API call
+        setTimeout(() => {
+            const loadingMsg = document.querySelector(`[data-id="${loadingId}"]`);
+            if (loadingMsg) loadingMsg.remove();
+
+            // Simple keyword matching for demo
+            let reply = "That's an interesting question! I recommend checking the term resources.";
+            if (text.toLowerCase().includes('math')) reply = "For Mathematics, focus on the Algebra section in Term 2.";
+            if (text.toLowerCase().includes('english')) reply = "English revision is key! Have you reviewed your poetry notes?";
+            if (text.toLowerCase().includes('science')) reply = "Science rocks! Don't forget to practice your chemical equations.";
+            if (text.toLowerCase().includes('history')) reply = "History is all about context. Make sure you know your dates!";
+
+            appendMessage('bot', reply);
+        }, 1500);
+    }
+
+    function appendMessage(role, html) {
+        const div = document.createElement('div');
+        div.className = `chat-message ${role}`;
+        const id = Date.now();
+        div.dataset.id = id;
+        div.innerHTML = html;
+        messages.appendChild(div);
+        messages.scrollTop = messages.scrollHeight;
+        return id;
+    }
+
+    sendBtn.addEventListener('click', sendMessage);
+    input.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') sendMessage();
+    });
+}
+
+function initVisualEffects() {
+    // 1. Custom Cursor (Single Instance)
+    if (!document.querySelector('.cursor-dot')) {
+        const cursorDot = document.createElement('div');
+        const cursorOutline = document.createElement('div');
+        cursorDot.className = 'cursor-dot';
+        cursorOutline.className = 'cursor-outline';
+        document.body.appendChild(cursorDot);
+        document.body.appendChild(cursorOutline);
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+    }
+
+    // 2. Vanilla 3D Tilt Effect (Re-attachable)
+    const tiltElements = document.querySelectorAll('.glass-panel-md, .card');
+
+    tiltElements.forEach(el => {
+        el.addEventListener('mousemove', (e) => {
+            const rect = el.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+
+            // Calculate rotation
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -5; // Max 5deg
+            const rotateY = ((x - centerX) / centerX) * 5;
+
+            el.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+        });
+
+        el.addEventListener('mouseleave', () => {
+            el.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+        });
+    });
+}
 
 // --- API Helper ---
 async function apiCall(endpoint, method = 'GET', body = null) {
+    // MOCK MODE: Intercept calls for local testing
+    if (siteConfig.useMockApi) {
+        console.log(`[MOCK API] ${method} ${endpoint}`, body);
+        await new Promise(r => setTimeout(r, 500)); // Simulate latency
+
+        if (endpoint === '/auth/google' || endpoint === '/auth/signup' || endpoint === '/auth/signin') {
+            return {
+                id: 'mock-user-123',
+                name: 'Test Student',
+                email: 'student@test.local',
+                picture: 'https://ui-avatars.com/api/?name=Test+Student&background=random',
+                subscription: 'free',
+                token: 'mock-jwt-token'
+            };
+        }
+        if (endpoint === '/verifyPayment') {
+            return { success: true };
+        }
+        if (endpoint === '/tasks' && method === 'GET') {
+            return [
+                { _id: '1', text: 'Complete Math Worksheet', completed: false },
+                { _id: '2', text: 'Read History Chapter 4', completed: true }
+            ];
+        }
+        if (endpoint === '/tasks' && method === 'POST') {
+            return { _id: Date.now().toString(), text: body.text, completed: false };
+        }
+        if (endpoint.startsWith('/tasks/')) {
+            return { success: true };
+        }
+        return {};
+    }
+
     const token = localStorage.getItem('studyHubToken');
     const headers = {
         'Content-Type': 'application/json'
@@ -63,22 +231,46 @@ function initGoogleLogin() {
     // Check Login State
     if (userSession) {
         const user = JSON.parse(userSession);
+
+        // AUTO-FIX: Force guest completion
+        if (user.id === 'guest') {
+            sessionStorage.setItem('studyHubProfileCompleted', 'true');
+            if (authStep2) authStep2.style.display = 'none';
+        }
+        const isProfileDone = sessionStorage.getItem('studyHubProfileCompleted');
+
         if (signinBtn) signinBtn.style.display = 'none';
         if (guestContainer) guestContainer.style.display = 'none';
         if (userProfile) userProfile.style.display = 'flex';
         if (userAvatar) userAvatar.src = user.picture;
         if (usernameText) usernameText.textContent = user.username || user.name;
 
+        const upgradeBtn = document.getElementById('upgrade-btn');
+        if (upgradeBtn) {
+            if (user.subscription === 'premium') {
+                upgradeBtn.style.display = 'none';
+                if (usernameText) usernameText.innerHTML += ' <i class="fa-solid fa-check-circle" style="color: #ffd700; margin-left: 5px;" title="Premium Member"></i>';
+            } else {
+                upgradeBtn.style.display = 'block';
+                // Attach payment handler
+                upgradeBtn.onclick = () => startPayment(user);
+            }
+        }
+
         // Profile Completion Check
-        if (!profileCompleted) {
+        if (!isProfileDone && user.id !== 'guest') {
             authStep2.style.display = 'flex';
+        } else {
+            authStep2.style.display = 'none';
         }
     } else {
+        // Not Logged In
         if (signinBtn) signinBtn.style.display = 'block';
         if (guestContainer) guestContainer.style.display = 'block';
         if (userProfile) userProfile.style.display = 'none';
     }
 
+    // Manual Auth Form
     const authEmail = document.getElementById('auth-email');
     const authPassword = document.getElementById('auth-password');
     const authUsername = document.getElementById('auth-username');
@@ -105,23 +297,18 @@ function initGoogleLogin() {
                     setupError.style.display = 'block';
                     return;
                 }
-                // Call API Signup
                 data = await apiCall('/auth/signup', 'POST', { email, password, username });
             } else {
-                // Call API Login
                 data = await apiCall('/auth/signin', 'POST', { email, password });
             }
 
-            // Success
             localStorage.setItem('studyHubToken', data.token);
-            // We need to fetch the user profile if login didn't return it full (authService usually returns {user, token})
-            // Let's assume data.user is present
             if (data.user) {
                 localStorage.setItem('studyHubUser', JSON.stringify(data.user));
             }
 
             sessionStorage.setItem('studyHubProfileCompleted', 'true');
-            location.reload(); // Refresh to load state
+            location.reload();
 
         } catch (err) {
             setupError.textContent = err.message;
@@ -144,7 +331,6 @@ function initGoogleLogin() {
 
     // Guest Mode Logic
     const guestBtn = document.getElementById('enter-guest');
-
     if (guestBtn) {
         guestBtn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -156,14 +342,9 @@ function initGoogleLogin() {
             };
             localStorage.setItem('studyHubUser', JSON.stringify(guestUser));
 
-            // Show Profile
-            if (signinBtn) signinBtn.style.display = 'none';
-            if (guestContainer) guestContainer.style.display = 'none';
-            if (userProfile) userProfile.style.display = 'flex';
-            if (userAvatar) userAvatar.src = guestUser.picture;
-
-            // Trigger 2FA for security
-            authStep2.style.display = 'flex';
+            // Immediately complete guest profile
+            sessionStorage.setItem('studyHubProfileCompleted', 'true');
+            location.reload();
         });
     }
 
@@ -173,30 +354,78 @@ function initGoogleLogin() {
     }
 
     // Global callback for Google Sign-In
-    window.handleCredentialResponse = (response) => {
+    window.handleCredentialResponse = async (response) => {
         try {
-            const responsePayload = decodeJwtResponse(response.credential);
+            const token = response.credential;
+            localStorage.setItem('studyHubToken', token);
+            const userProfile = await apiCall('/auth/google', 'POST', { credential: token });
 
-            const user = {
-                id: responsePayload.sub,
-                name: responsePayload.name,
-                email: responsePayload.email,
-                picture: responsePayload.picture
-            };
-            localStorage.setItem('studyHubUser', JSON.stringify(user));
-
-            // Update UI immediately
-            if (signinBtn) signinBtn.style.display = 'none';
-            if (userProfile) userProfile.style.display = 'flex';
-            if (userAvatar) userAvatar.src = user.picture;
-
-            // Trigger 2FA
-            authStep2.style.display = 'flex';
-
+            if (userProfile) {
+                localStorage.setItem('studyHubUser', JSON.stringify(userProfile));
+                sessionStorage.setItem('studyHubProfileCompleted', 'true');
+                location.reload();
+            }
         } catch (e) {
             console.error('Login failed', e);
+            showToast('Login failed: ' + e.message, 'error');
+            localStorage.removeItem('studyHubToken');
         }
     };
+}
+
+// Payment Helper Function
+// Payment Helper Function
+function startPayment(user) {
+    // MOCK MODE: Bypass Paystack for local testing
+    if (siteConfig.useMockApi) {
+        showToast('Processing mock payment...', 'info');
+        setTimeout(async () => {
+            const result = await apiCall('/verifyPayment', 'POST', {
+                reference: 'mock-ref-' + Date.now(),
+                credential: localStorage.getItem('studyHubToken') || 'mock-jwt-token'
+            });
+
+            if (result && result.success) {
+                showToast('Upgrade Successful! Refreshing...', 'success');
+                const updatedUser = { ...user, subscription: 'premium' };
+                localStorage.setItem('studyHubUser', JSON.stringify(updatedUser));
+                location.reload();
+            }
+        }, 1500);
+        return;
+    }
+
+    const paystack = new PaystackPop();
+    paystack.newTransaction({
+        key: siteConfig.paystackPublicKey,
+        email: user.email,
+        amount: 5000,
+        currency: 'ZAR',
+        ref: '' + Math.floor((Math.random() * 1000000000) + 1),
+        onSuccess: async (transaction) => {
+            showToast('Payment processing... Please wait.', 'info');
+            try {
+                const result = await apiCall('/verifyPayment', 'POST', {
+                    reference: transaction.reference,
+                    credential: localStorage.getItem('studyHubToken')
+                });
+
+                if (result && result.success) {
+                    showToast('Upgrade Successful! Refreshing...', 'success');
+                    const updatedUser = { ...user, subscription: 'premium' };
+                    localStorage.setItem('studyHubUser', JSON.stringify(updatedUser));
+                    location.reload();
+                } else {
+                    showToast('Verification failed: ' + (result?.error || 'Unknown error'), 'error');
+                }
+            } catch (e) {
+                showToast('Verification error: ' + e.message, 'error');
+            }
+        },
+        onCancel: () => {
+            showToast('Transaction was cancelled.', 'info');
+        }
+    });
 }
 
 function decodeJwtResponse(token) {
@@ -252,6 +481,9 @@ async function renderContent() {
 
         container.appendChild(section);
     });
+
+    // Re-initialize tilt for new cards
+    initVisualEffects();
 }
 
 function startClock() {
@@ -424,7 +656,7 @@ async function initTodo() {
                 todos.push(newTask);
                 render();
             } catch (e) {
-                alert('Error adding task: ' + e.message);
+                showToast('Error adding task: ' + e.message, 'error');
             }
         }
     });
@@ -437,8 +669,6 @@ async function initTodo() {
 }
 
 // --- Personalization ---
-
-
 
 function initThemes() {
     const savedColor = localStorage.getItem('studyHubTheme') || '#6a11cb'; // Default Purple

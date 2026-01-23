@@ -1,0 +1,17 @@
+{
+    "name": "grade8-study-hub-api-functions",
+    "version": "1.0.0",
+    "description": "Azure Static Web Apps Managed Functions for Grade 8 Study Hub",
+    "main": "src/functions/*.js",
+    "scripts": {
+        "start": "func start",
+        "test": "echo \"No tests yet...\""
+    },
+    "dependencies": {
+        "@azure/functions": "^4.0.0",
+        "@azure/storage-blob": "^12.17.0",
+        "google-auth-library": "^9.6.3",
+        "axios": "^1.6.7",
+        "uuid": "^9.0.1"
+    }
+}

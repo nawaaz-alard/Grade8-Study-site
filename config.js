@@ -2,7 +2,9 @@ const siteConfig = {
     userName: "Student",
     googleClientId: "895631263906-0m54r2mfu8aatr5jq9qlnmrl0c78m72g.apps.googleusercontent.com",
     // BACKEND API URL
-    apiBaseUrl: "http://localhost:8080/api",
+    apiBaseUrl: "http://localhost:7071/api",
+    useMockApi: true, // Set to true for local testing without backend
+    paystackPublicKey: "pk_test_xXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXxXx", // Replace with your Public Key
     securityPin: "1234", // Secondary Authentication PIN
     // Set your next big exam date here (YYYY-MM-DD or YYYY-MM-DDTHH:MM)
     examDate: "2025-11-15T09:00",
@@ -18,7 +20,7 @@ const siteConfig = {
     // Same subjects for every term as requested
     links: [
         // TERM 1
-        { term: 1, subject: "Mathematics", topic: "Quiz Site", url: "#", icon: "fa-calculator" },
+        { term: 1, subject: "Mathematics", topic: "Quiz Site", url: "../Math-quiz-site/index.html", icon: "fa-calculator" },
         { term: 1, subject: "English", topic: "Quiz Site", url: "#", icon: "fa-book" },
         { term: 1, subject: "Biology", topic: "Quiz Site", url: "#", icon: "fa-dna" },
         { term: 1, subject: "Chemistry", topic: "Quiz Site", url: "#", icon: "fa-flask" },
